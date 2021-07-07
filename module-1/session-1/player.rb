@@ -9,7 +9,7 @@ class Player
     end
 
     def to_s
-        "#{@name} has #{@hitpoint} hitpoint and #{@attack_damage} attack damage"
+        "#{@name} has #{@hitpoint} hitpoint and #{@attack_damage} attack damage\n\n"
     end
 
     def show_status
@@ -19,21 +19,29 @@ class Player
     def attack(other_player)
         puts "#{@name} attacks #{other_player.name} with #{@attack_damage}"
 
-        probability = rand()
-        if probability < other_player.deflect_chance
-            puts "#{other_player.name} deflects the attack."
-        else
+        if is_able_to_attack?(other_player.deflect_chance)
             other_player.take_damage(@attack_damage)
+        else
+            puts "#{other_player.name} deflects the attack."
         end
+    end
+
+    def is_able_to_attack?(deflect_chance)
+        attack_probability = rand()
+        if attack_probability > deflect_chance
+            return true
+        end
+
+        return false
     end
 
     def take_damage(damage)
         @hitpoint -= damage
     end
 
-    def is_dies?
+    def is_dead?
         if @hitpoint <= 0
-            puts "\n#{@name} dies."
+            puts "#{@name} dies."
             return true
         end
 
